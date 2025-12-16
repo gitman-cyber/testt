@@ -337,18 +337,7 @@ class CraftingManager {
         angleMode(DEGREES);
 
         // --- Items ---
-        registerDefaultItems();
-
-        // --- Crafting Recipes ---
-        CRAFTING.addRecipe(
-            { "wood": 1, "stone": 1 },
-            stack("torch", 2)
-        );
-
-        CRAFTING.addRecipe(
-            { "stone": 3, "wood": 2 },
-            stack("pickaxe", 1)
-        );
+ 
 
         // --- Terrain ---
         this.terrain = new Terrain(2000, 2000, 20);
@@ -725,3 +714,4 @@ function keyPressed() {
     </script>
   </body>
 </html>
+
