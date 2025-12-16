@@ -45,34 +45,27 @@
     }
 
     drawSlot(x, y, stack) {
-        // slot background
-        fill(60, 60, 60, 200);
-        stroke(255);
-        rect(x, y, this.slotSize, this.slotSize, 4);
+    fill(60, 60, 60, 200);
+    stroke(255);
+    rect(x, y, this.slotSize, this.slotSize, 4);
 
-        if (!stack) return;
+    if (!stack || !stack.item) return; // <-- early exit if no item
 
-        // ---------------------------
-        // Draw item name
-        // ---------------------------
-        this.font.drawText(
-            stack.item.name,
-            x + 5,
-            y + this.slotSize / 2
-        );
+    this.font.drawText(
+        stack.item.name,
+        x + 5,
+        y + this.slotSize / 2
+    );
 
-        // ---------------------------
-        // Draw quantity (bottom-right)
-        // ---------------------------
-        if (stack.amount > 1) {
-            push();
-            fill(255);
-            textSize(14);
-            textAlign(RIGHT, BOTTOM);
-            text(stack.amount, x + this.slotSize - 4, y + this.slotSize - 4);
-            pop();
-        }
+    if (stack.amount > 1) {
+        push();
+        fill(255);
+        textSize(14);
+        textAlign(RIGHT, BOTTOM);
+        text(stack.amount, x + this.slotSize - 4, y + this.slotSize - 4);
+        pop();
     }
+}
 
     draw() {
         if (!this.visible) return;
@@ -214,8 +207,11 @@ class ItemStack {
     }
 }
 function stack(id, amount) {
-    return new ItemStack(ITEMS.get(id), amount);
+    const item = ITEMS.get(id);
+    if (!item) return null; // return null if item doesn't exist
+    return new ItemStack(item, amount);
 }
+
 
 // ---------------------------
 // Item Registry (global)
@@ -710,4 +706,3 @@ function keyPressed() {
     </script>
   </body>
 </html>
-
