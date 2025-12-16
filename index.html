@@ -111,21 +111,17 @@ Inventory.prototype.countItem = function(id) {
 Inventory.prototype.removeItems = function(id, amount) {
     for (let stack of this.items) {
         if (!stack) continue;
-
         if (stack.item.id === id) {
-            let take = min(stack.amount, amount);
+            let take = Math.min(stack.amount, amount);
             stack.amount -= take;
             amount -= take;
-
             if (stack.amount <= 0) {
                 stack.amount = 0;
             }
-
             if (amount <= 0) return;
         }
     }
 };
-
 class Debug extends GUI {
     constructor(font, x, y) {
         super(x, y);
@@ -155,27 +151,24 @@ class Debug extends GUI {
     }
 }
 
+// Fix font loading: use default font if custom font fails
 class Font extends GUI {
     constructor(fontpath) {
         super();
-        this.font = loadFont(fontpath);
+        this.font = null;
         this.size = 16;
         this.color = color(255);
+        loadFont(fontpath, f => this.font = f, () => this.font = 'Arial');
     }
-
-    setSize(s) { this.size = s; }
-    setColor(c){ this.color = c; }
-
     drawText(text1, x, y) {
         push();
         fill(this.color);
-        textFont(this.font);
+        textFont(this.font || 'Arial');
         textSize(this.size);
         text(text1, x, y);
         pop();
     }
-}
-
+};
 // ---------------------------
 // Base GUI Class
 // ---------------------------
@@ -219,6 +212,9 @@ class ItemStack {
     clone() {
         return new ItemStack(this.item.clone(), this.amount);
     }
+}
+function stack(id, amount) {
+    return new ItemStack(ITEMS.get(id), amount);
 }
 
 // ---------------------------
